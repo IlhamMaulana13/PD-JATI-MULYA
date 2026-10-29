@@ -1,24 +1,24 @@
-import type { Metadata } from "next";
-import { Geist } from "next/font/google";
-import "./globals.css";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
+import type { Metadata } from 'next'
+import { Geist } from 'next/font/google'
+import './globals.css'
+import Navbar from '@/components/Navbar'
+import Footer from '@/components/Footer'
 
 const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
+  variable: '--font-geist-sans',
+  subsets: ['latin'],
+})
 
 export const metadata: Metadata = {
-  title: "PD Jati Mulya — Produsen Kusen Kayu Presisi & Lis Gypsum Modern",
+  title: 'PD Jati Mulya — Produsen Kusen Kayu Presisi & Lis Gypsum Modern',
   description:
-    "Pilihan terpercaya untuk kusen kayu mahoni, meranti, pintu minimalis, dan lis gypsum berkualitas tinggi di Tangerang. Melayani pemesanan kustom & proyek bangunan.",
-};
+    'Pilihan terpercaya untuk kusen kayu mahoni, meranti, pintu minimalis, dan lis gypsum berkualitas tinggi di Tangerang. Melayani pemesanan kustom & proyek bangunan.',
+}
 
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode;
+  children: React.ReactNode
 }) {
   return (
     <html
@@ -31,7 +31,5 @@ export default function RootLayout({
         <Footer />
       </body>
     </html>
-  );
+  )
 }
-
-

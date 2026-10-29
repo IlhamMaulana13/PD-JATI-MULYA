@@ -47,8 +47,8 @@ Membangun MVP (Minimum Viable Product) website *company profile* dan katalog pro
   - Implementasi Halaman Login Admin (`/login`) dengan form input dan penanganan pesan error.
   - Implementasi logika validasi kredensial *hardcoded* dan pengalihan ke dashboard.
   - Implementasi Halaman Dashboard Admin Purwarupa (`/admin/dashboard`) dengan ucapan selamat datang dan tombol Logout.
+  - Integrasi Supabase untuk modul pencatatan transaksi keuangan.
 - **Out-of-Scope (Tidak Dikerjakan / Ditunda):** 
-  - Pengembangan *Backend* kompleks dan integrasi Database sungguhan (MySQL, PostgreSQL, MongoDB, Prisma ORM, dll) — ditunda untuk fase penelitian selanjutnya.
   - Sistem Registrasi Akun Mandiri (*Self-Registration*) dan manajemen multi-level user dinamis.
   - Sistem Keranjang Belanja (*Cart*) dinamis.
   - Sistem Pembayaran Otomatis (*Payment Gateway*).

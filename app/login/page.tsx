@@ -3,39 +3,53 @@
 import { useState, type FormEvent } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { validateAdminCredentials, setAdminSession, DUMMY_ADMIN } from '@/lib/auth'
+import { setAdminSession } from '@/lib/auth'
+import { createClient } from '@/utils/supabase/client'
 
 export default function LoginPage() {
   const router = useRouter()
+  // Tugas 1: Inisialisasi awal username dan password selalu string kosong ""
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
   const [isLoading, setIsLoading] = useState(false)
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  // Tugas 2: Autentikasi menggunakan Supabase RPC verify_admin_password
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setErrorMessage('')
     setIsLoading(true)
 
-    // Simulasi loading singkat untuk efek visual modern & feedback UX
-    setTimeout(() => {
-      const isValid = validateAdminCredentials(username, password)
+    try {
+      const supabase = createClient()
+      const { data, error } = await supabase.rpc('verify_admin_password', {
+        p_username: username,
+        p_password: password,
+      })
 
-      if (isValid) {
-        setAdminSession()
+      if (error) {
+        console.error('Supabase auth RPC error:', error)
+        setErrorMessage('Username atau Password salah!')
+        setIsLoading(false)
+        return
+      }
+
+      // Verifikasi jika kredensial cocok (bisa mengembalikan boolean true atau user record)
+      const isMatch = Boolean(data) && data !== false && !(Array.isArray(data) && data.length === 0)
+
+      if (isMatch) {
+        setAdminSession(username)
         router.push('/admin/dashboard')
       } else {
         setErrorMessage('Username atau Password salah!')
         setIsLoading(false)
       }
-    }, 400)
-  }
-
-  const handleFillDemo = () => {
-    setUsername(DUMMY_ADMIN.username)
-    setPassword(DUMMY_ADMIN.password)
-    setErrorMessage('')
+    } catch (err) {
+      console.error('Submit login error:', err)
+      setErrorMessage('Username atau Password salah!')
+      setIsLoading(false)
+    }
   }
 
   return (
@@ -104,7 +118,7 @@ export default function LoginPage() {
                   name="username"
                   type="text"
                   required
-                  autoComplete="username"
+                  autoComplete="off"
                   placeholder="Masukkan username"
                   value={username}
                   onChange={(e) => {
@@ -140,7 +154,7 @@ export default function LoginPage() {
                   name="password"
                   type={showPassword ? 'text' : 'password'}
                   required
-                  autoComplete="current-password"
+                  autoComplete="off"
                   placeholder="Masukkan password"
                   value={password}
                   onChange={(e) => {
@@ -225,7 +239,7 @@ export default function LoginPage() {
               </button>
             </div>
 
-            {/* Error Message Display Below Form (Mandatory Requirement) */}
+            {/* Error Message Display */}
             {errorMessage && (
               <div
                 role="alert"
@@ -248,29 +262,6 @@ export default function LoginPage() {
               </div>
             )}
           </form>
-
-          {/* Quick Demo Helper Box */}
-          <div className="mt-8 pt-6 border-t border-slate-100">
-            <div className="rounded-2xl bg-amber-50/80 border border-amber-200/80 p-3.5 text-xs text-amber-900 space-y-2">
-              <div className="flex items-center justify-between font-bold">
-                <span className="flex items-center gap-1.5">
-                  <span>💡</span> Kredensial Uji Coba Purwarupa:
-                </span>
-                <button
-                  type="button"
-                  onClick={handleFillDemo}
-                  className="text-[11px] text-amber-700 hover:text-amber-950 font-bold underline cursor-pointer hover:scale-105 transition-transform"
-                >
-                  Gunakan Otomatis
-                </button>
-              </div>
-              <div className="flex items-center justify-between text-slate-700 font-mono text-[11px] bg-white/70 px-2.5 py-1.5 rounded-xl border border-amber-200/50">
-                <span>user: <strong className="text-slate-900 font-bold">admin</strong></span>
-                <span>•</span>
-                <span>pass: <strong className="text-slate-900 font-bold">admin123</strong></span>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
     </div>

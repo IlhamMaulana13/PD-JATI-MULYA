@@ -30,11 +30,11 @@ export function validateAdminCredentials(username: string, password: string): bo
 /**
  * Simpan sesi login ke browser storage (sessionStorage)
  */
-export function setAdminSession(): AuthSession {
+export function setAdminSession(username: string = 'admin'): AuthSession {
   const session: AuthSession = {
-    username: DUMMY_ADMIN.username,
-    name: DUMMY_ADMIN.name,
-    role: DUMMY_ADMIN.role,
+    username: username,
+    name: 'Administrator Toko',
+    role: 'Super Admin',
     loginTime: new Date().toISOString(),
   }
   if (typeof window !== 'undefined') {
